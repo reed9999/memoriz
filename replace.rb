@@ -3,19 +3,13 @@
 class Replacer
 	class << self
   ORDER = ["eté", "aonu", "èêrish", "dlcm", "wfg", "ypbvkjxqz"]
-    def broken_multi text
-      rv=[] #redo this with #map
-      ORDER.each do |to_replace|
-        rv << replaced(text, to_replace)
-      end
-      rv
-		end
-
-    def multi text
+    def single_line text
       puts text
-      ORDER.each do |to_replace|
-        puts replaced(text, to_replace)
+      rv = ORDER.collect do |to_replace|
+        replaced(text.chomp, to_replace).clone
       end
+      puts rv.join "\t"
+      rv
 		end
     def replaced text, to_replace
       text.tr! to_replace.downcase, '_'
@@ -24,6 +18,13 @@ class Replacer
     end
 	end
 end
+input = File.open("input.txt") do |f|
+  f.readlines
+end
+input.each do |v|
+  Replacer.single_line v
+end
+
 verses = [
 "6 lui qui est de condition divine,
 il n'a pas regardé son égalité avec Dieu
@@ -45,6 +46,3 @@ dans le ciel, sur la terre et sous la terre",
 que Jésus-Christ est le Seigneur,
 à la gloire de Dieu le Père.",
 ]
-verses.each do |v|
-  Replacer.multi v
-end
